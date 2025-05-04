@@ -1,0 +1,31 @@
+[project]
+name = "charz-rust"
+dynamic = ["version"]
+description = "Blazingly fast speed-ups for charz"
+authors = [
+    { name = "Havsalt", email = "77575424+Havsalt@users.noreply.github.com" }
+]
+dependencies = [
+    "charz>=0.0.41",
+]
+readme = "README.md"
+requires-python = ">= 3.10"
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[build-system]
+requires = ["maturin~=1.7"]
+build-backend = "maturin"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "pytest>=8.3.5",
+]
