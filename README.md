@@ -1,4 +1,7 @@
 # charz-rust
 
-Describe your project here.
-* License: MIT
+Blazingly fast speed-ups for charz
+
+## License
+
+MIT

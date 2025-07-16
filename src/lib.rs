@@ -1,12 +1,12 @@
 use pyo3::prelude::*;
 
-const RESET: &str = "\x1b[0m";
+const ASNI_RESET_CODE: &str = "\x1b[0m";
 
 #[pyfunction]
-fn render_all(
-    screen: &PyAny,
-    nodes: &PyAny,
-    camera: &PyAny,
+fn render_all<'py>(
+    screen: Bound<'py, PyAny>,
+    nodes: Bound<'py, PyAny>,
+    camera: Bound<'py, PyAny>,
     camera_centering_x: f32,
     camera_centering_y: f32,
 ) -> PyResult<String> {
@@ -21,7 +21,7 @@ fn render_all(
     // Empty 2D screen buffer filled with `screen.transparency_fill`
     let mut screen_buf: Vec<Vec<(char, Option<String>)>> =
         vec![vec![(transparency_fill, None); screen_width as usize]; screen_height as usize];
-    let nodes_list: Vec<&PyAny> = nodes.extract()?;
+    let nodes_list: Vec<Bound<'py, PyAny>> = nodes.extract()?;
     let mut nodes_z_index_pairs: Vec<_> = nodes_list
         .iter()
         .map(|node| {
@@ -103,9 +103,9 @@ fn render_all(
                 .iter()
                 .map(|(cell, color)| {
                     if let Some(color_code) = color {
-                        format!("{RESET}{color_code}{cell}")
+                        format!("{ASNI_RESET_CODE}{color_code}{cell}")
                     } else {
-                        format!("{RESET}{cell}")
+                        format!("{ASNI_RESET_CODE}{cell}")
                     }
                 })
                 .collect()
@@ -119,7 +119,7 @@ fn render_all(
 // TODO: Implement flipping and rotation db
 
 #[pymodule]
-fn charz_rust(_py: Python, m: &PyModule) -> PyResult<()> {
+fn _core(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(render_all, m)?)?;
     Ok(())
 }

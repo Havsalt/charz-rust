@@ -1,31 +1,62 @@
+[build-system]
+requires = ["maturin~=1.0"]
+build-backend = "maturin"
+
 [project]
 name = "charz-rust"
-dynamic = ["version"]
+version = "0.1.0.dev0"
 description = "Blazingly fast speed-ups for charz"
 authors = [
     { name = "Havsalt", email = "77575424+Havsalt@users.noreply.github.com" }
 ]
+requires-python = ">=3.10"
 dependencies = [
-    "charz>=0.0.41",
-]
-readme = "README.md"
-requires-python = ">= 3.10"
-license = { file = "LICENSE" }
-classifiers = [
-    "Programming Language :: Rust",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
+    "charz>=0.1.0",
 ]
 
-[build-system]
-requires = ["maturin~=1.7"]
-build-backend = "maturin"
+[dependency-groups]
+dev = [
+    "pydoc-markdown>=4.8.2",
+    "pydoc-markdown-havsalt>=0.1.0",
+]
+lint = [
+    "ruff>=0.12.0",
+]
 
 [tool.maturin]
+module-name = "charz_rust._core"
+python-packages = ["charz_rust"]
+python-source = "src"
 features = ["pyo3/extension-module"]
 
-[tool.rye]
-managed = true
-dev-dependencies = [
-    "pytest>=8.3.5",
-]
+[[tool.pydoc-markdown.loaders]]
+type = "python"
+modules = ["charz_rust"]
+
+[[tool.pydoc-markdown.processors]]
+type = "google"
+
+[[tool.pydoc-markdown.processors]]
+type = "filter"
+documented_only = true
+
+[[tool.pydoc-markdown.processors]]
+type = "crossref"
+
+[tool.pydoc-markdown.renderer]
+type = "pydoc_markdown_havsalt.RuffMarkdownRenderer"
+filename = "DOCS.md"
+page_title = "Documentation for `charz-rust`"
+render_page_title = true
+render_toc = true
+insert_header_anchors = true
+code_headers = true
+descriptive_class_title = "Class "
+add_method_class_prefix = true
+
+[tool.pydoc-markdown.renderer.header_level_by_type]
+Module = 1
+Function = 2
+Class = 2
+Variable = 3
+Method = 3
